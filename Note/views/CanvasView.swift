@@ -39,8 +39,10 @@ struct CanvasView: View {
       }
     )
     .offset(x: data.pagePositionValueAnim, y: 0)
+    .scaleEffect(x: data.pageScaleValueAnim, y: data.pageScaleValueAnim)
+    .animation(.easeIn(duration: 0.05), value: data.pageScaleValueAnim)
     .opacity(opacityValue)
-    .animation(.easeOut(duration: 0.2), value: opacityValue)
+//    .animation(.easeOut(duration: 0.05), value: opacityValue)
     .onAppear(perform: data.LoadDisplay)
     .onAppear(perform: logPageID)
     .onReceive(
@@ -69,7 +71,12 @@ struct CanvasView: View {
 
   func animateImage(old: Int, new: Int) {
     print("scale started")
-    opacityValue = 0.9
+//    opacityValue = 0.9
+    if old > new {
+      data.pagePositionValueAnim = 100
+    } else {
+      data.pagePositionValueAnim = -100
+    }
 
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
       opacityValue = 1

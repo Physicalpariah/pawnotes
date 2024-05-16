@@ -20,6 +20,11 @@ enum SwipeHVDirection: String {
 }
 
 let picker = PKToolPicker.init()
+let minTranslation = 25.0
+let minMoveTranslation = 50.0
+let maxTranslation = 150.0
+
+let moveScaleDown = 0.95
 
 struct MainView: View {
 
@@ -30,12 +35,12 @@ struct MainView: View {
       CanvasView(appData)
       MenuButtonsView(appData)
       VStack {
-        Spacer()
-        Text("Page: " + appData.currentPageData.title + " | " + String(appData.count))
-          .frame(maxWidth: .infinity, alignment: .trailing)
-          .padding(.vertical, 10)
-          .padding(.horizontal, 40)
+        Text(appData.currentPageData.title + " | " + String(appData.count))
+          .font(.system(size: 18))
+          .frame(maxWidth: .infinity, alignment: .center)
+          .padding(.vertical, 40)
           .opacity(appData.buttonOpacity)
+        Spacer()
       }
     }
     .frame(alignment: .leading)
@@ -45,10 +50,22 @@ struct MainView: View {
     .gesture(
       DragGesture()
         .onChanged { gesture in
-          if gesture.translation.width < 100 || gesture.translation.width > -100 {
-            appData.pagePositionValueAnim = gesture.translation.width
+
+          let width = gesture.translation.width
+          if width < maxTranslation || width > -maxTranslation {
+            appData.pagePositionValueAnim = width
+            print("moving!")
           }
 
+          if width > maxTranslation && width > 0 {
+            appData.pageScaleValueAnim = moveScaleDown
+          } else if width < -maxTranslation && width < 0 {
+            appData.pageScaleValueAnim = moveScaleDown
+          } else {
+            appData.pageScaleValueAnim = 1
+          }
+
+          print(width)
         }
         .onEnded { value in
           print("value ", value.translation.width)
@@ -56,29 +73,30 @@ struct MainView: View {
           if direction == .left {
             // your code here
             appData.PrevPage()
-          }
-          if direction == .right {
+          } else if direction == .right {
             // your code here
             appData.NextPage()
-          }
-            
+          } else {
             appData.pagePositionValueAnim = 0
+          }
+          appData.pageScaleValueAnim = 1
+
           print(direction)
         }
     )
   }
 
   func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {
-    if value.startLocation.x < value.location.x - 24 {
+    if value.startLocation.x < value.location.x - maxTranslation {
       return .left
     }
-    if value.startLocation.x > value.location.x + 24 {
+    if value.startLocation.x > value.location.x + maxTranslation {
       return .right
     }
-    if value.startLocation.y < value.location.y - 24 {
+    if value.startLocation.y < value.location.y - maxTranslation {
       return .down
     }
-    if value.startLocation.y > value.location.y + 24 {
+    if value.startLocation.y > value.location.y + maxTranslation {
       return .up
     }
     return .none

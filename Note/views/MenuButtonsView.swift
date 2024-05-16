@@ -9,21 +9,22 @@ struct MenuButtonsView: View {
   }
 
   var body: some View {
-    ZStack {
-      ZenButtonView(text: "zen", clicked: data.ToggleZenMode, viewData: data)
-    }
-    .padding(.horizontal, 30)
-    .padding(.top, data.topPadding)
-    .animation(.none, value: 1)
+    //    ZStack {
+    //      ZenButtonView(text: "zen", clicked: data.ToggleZenMode, viewData: data)
+    //    }
+    //    .padding(.horizontal, 30)
+    //    .padding(.top, data.topPadding)
+    //    .animation(.none, value: 1)
 
     HStack {
       if !data.buttonDisabled {
         TopButtonView(text: "backgrounds", clicked: data.ChangeBG, viewData: data)
         Spacer()
+        TopButtonView(text: "copy", clicked: data.SendToClipboard, viewData: data)
       } else {
-        Spacer()
-        ZenButtonView(text: "zen", clicked: data.ToggleZenMode, viewData: data)
-        Spacer()
+        //        Spacer()
+        //        ZenButtonView(text: "zen", clicked: data.ToggleZenMode, viewData: data)
+        //        Spacer()
       }
     }
     .padding(.horizontal, 30)

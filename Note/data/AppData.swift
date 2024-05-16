@@ -25,8 +25,10 @@ public class AppData: ObservableObject {
 
   @Published var currentPageTitle = "1 | 1"
   @Published var topPadding = 35.0
-    
-    @Published var pagePositionValueAnim = 0.0
+
+  @Published var pageScaleValueAnim = 1.0
+  @Published var pagePositionValueAnim = 0.0
+  @Published var pageAnimTimeValue = 0.2
 
   init() {
   }
@@ -44,18 +46,20 @@ public class AppData: ObservableObject {
     if currentPage == 0 {
       currentPage = 1
     }
-      
-      currentPageData = pages[currentPage - 1]
-      LoadDisplay()
+
+    currentPageData = pages[currentPage - 1]
+    LoadDisplay()
   }
 
   func NextPage() {
     if CanvasView.canvasView.drawing.dataRepresentation().count <= 64 {
-        print("nah page is empty")
-        pagePositionValueAnim = 0;
+      print("nah page is empty")
+      pagePositionValueAnim = 0
+      pageAnimTimeValue = 0.4
       return
     } else {
-        print("page is not empty, making a new one")
+      print("page is not empty, making a new one")
+      pageAnimTimeValue = 0.2
       currentPage += 1
       SetPage()
     }
@@ -65,6 +69,7 @@ public class AppData: ObservableObject {
     currentPage -= 1
     if currentPage <= 1 {
       currentPage = 1
+      pagePositionValueAnim = 0
     }
     SetPage()
   }
@@ -130,7 +135,7 @@ public class AppData: ObservableObject {
       print("Loaded background is: ")
       print(currentPageData.currentBackground)
       print("Drawing successfully loaded")
-        print("data count is:" + String (d.dataRepresentation().count))
+      print("data count is:" + String(d.dataRepresentation().count))
     } catch {
       print("Error loading drawing object")
     }
@@ -245,6 +250,11 @@ public class AppData: ObservableObject {
 
   public func ForceUpdate() {
     self.objectWillChange.send()
+  }
+
+  public func SendToClipboard() {
+    let img = CanvasView.canvasView.drawing.image(from: CanvasView.canvasView.frame, scale: 1.0)
+    UIPasteboard.general.image = img
   }
 
 }
