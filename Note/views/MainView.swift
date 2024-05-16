@@ -37,7 +37,6 @@ struct MainView: View {
           .padding(.horizontal, 40)
           .opacity(appData.buttonOpacity)
       }
-
     }
     .frame(alignment: .leading)
     .onAppear(perform: {
@@ -45,6 +44,12 @@ struct MainView: View {
     })
     .gesture(
       DragGesture()
+        .onChanged { gesture in
+          if gesture.translation.width < 100 || gesture.translation.width > -100 {
+            appData.pagePositionValueAnim = gesture.translation.width
+          }
+
+        }
         .onEnded { value in
           print("value ", value.translation.width)
           let direction = self.detectDirection(value: value)
@@ -56,6 +61,8 @@ struct MainView: View {
             // your code here
             appData.NextPage()
           }
+            
+            appData.pagePositionValueAnim = 0
           print(direction)
         }
     )

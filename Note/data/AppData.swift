@@ -25,6 +25,8 @@ public class AppData: ObservableObject {
 
   @Published var currentPageTitle = "1 | 1"
   @Published var topPadding = 35.0
+    
+    @Published var pagePositionValueAnim = 0.0
 
   init() {
   }
@@ -42,13 +44,15 @@ public class AppData: ObservableObject {
     if currentPage == 0 {
       currentPage = 1
     }
-
+      
+      currentPageData = pages[currentPage - 1]
       LoadDisplay()
   }
 
   func NextPage() {
     if CanvasView.canvasView.drawing.dataRepresentation().count <= 64 {
         print("nah page is empty")
+        pagePositionValueAnim = 0;
       return
     } else {
         print("page is not empty, making a new one")
