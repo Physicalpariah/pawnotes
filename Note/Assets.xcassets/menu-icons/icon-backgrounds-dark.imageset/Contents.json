@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon-backgrounds-dark.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
