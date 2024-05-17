@@ -14,7 +14,7 @@ public struct ViewData {
   }
 }
 
-public class ImageData {
+public class ImageData : ObservableObject {
   var offset = CGSize()
   var zoom = 1.0
   var rotationAngle: Angle = .degrees(0)
