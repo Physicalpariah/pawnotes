@@ -62,6 +62,8 @@ public class AppData: ObservableObject {
       pageAnimTimeValue = 0.2
       currentPage += 1
       SetPage()
+
+      // whoa there
     }
   }
 
