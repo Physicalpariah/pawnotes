@@ -49,16 +49,13 @@ public class AppData: ObservableObject {
       currentPage = 1
     }
 
-    if (count == 0)
-      {
-        let page = ViewData(heading: String(currentPage))
-        pages.append(page)
+    if count == 0 {
+      let page = ViewData(heading: String(currentPage))
+      pages.append(page)
+    } else {
+      currentPageData = pages[currentPage - 1]
     }
-      else
-      {
-          currentPageData = pages[currentPage - 1]
-      }
-   
+
     LoadDisplay()
   }
 
@@ -157,7 +154,7 @@ public class AppData: ObservableObject {
   public func SaveDisplay() {
     print("Attempting to save drawing")
     currentPageData.data = CanvasView.canvasView.drawing.dataRepresentation()
-    Save(data: currentPageData)
+    Save(data: CanvasView.canvasView.drawing.dataRepresentation())
   }
 
   func dataKey() -> String {
@@ -172,7 +169,7 @@ public class AppData: ObservableObject {
     return currentPageData.title + pageCount
   }
 
-  public func Save(data: ViewData) {
+  public func Save(data: Data) {
     let defaults = UserDefaults.standard
     defaults.set(data, forKey: dataKey())
     defaults.set(currentPageData.currentBackground, forKey: bgKey())
@@ -192,6 +189,9 @@ public class AppData: ObservableObject {
     defaults.set(nil, forKey: dataKey())
     defaults.set(0, forKey: bgKey())
     defaults.set([], forKey: pageCountKey())
+    let domain = Bundle.main.bundleIdentifier!
+    UserDefaults.standard.removePersistentDomain(forName: domain)
+    UserDefaults.standard.synchronize()
     currentPage = 0
     count = 0
     currentPageData.currentBackground = 0
