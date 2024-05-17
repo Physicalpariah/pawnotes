@@ -34,7 +34,7 @@ public class AppData: ObservableObject {
   }
 
   func Initialise() {
-    Reset()
+//    Reset()
     print(currentPage)
     print(count)
 
@@ -154,7 +154,7 @@ public class AppData: ObservableObject {
   public func SaveDisplay() {
     print("Attempting to save drawing")
     currentPageData.data = CanvasView.canvasView.drawing.dataRepresentation()
-    Save(data: CanvasView.canvasView.drawing.dataRepresentation())
+    Save()
   }
 
   func dataKey() -> String {
@@ -165,19 +165,36 @@ public class AppData: ObservableObject {
     return currentPageData.title + bgName
   }
 
+  func imgKey() -> String {
+      return currentPageData.title + "image"
+  }
+
   func pageCountKey() -> String {
     return currentPageData.title + pageCount
   }
 
-  public func Save(data: Data) {
+  public func Save() {
     let defaults = UserDefaults.standard
-    defaults.set(data, forKey: dataKey())
+    defaults.set(currentPageData.data, forKey: dataKey())
     defaults.set(currentPageData.currentBackground, forKey: bgKey())
+    if currentPageData.images.uiImage != nil {
+        if let data = currentPageData.images.uiImage?.pngData() {
+            defaults.set(data, forKey: imgKey())
+        }
+    }
   }
 
   public func Load() -> Data {
     let defaults = UserDefaults.standard
     currentPageData.currentBackground = defaults.integer(forKey: bgKey())
+      
+      let imgData = defaults.object(forKey: imgKey())
+      if (imgData != nil)
+      {
+      let pngImage = UIImage(data: imgData as! Data)
+        currentPageData.images.uiImage = pngImage
+      }
+    
     return defaults.object(forKey: dataKey()) as? Data ?? Data()
   }
 

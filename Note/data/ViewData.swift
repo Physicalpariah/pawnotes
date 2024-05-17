@@ -15,7 +15,6 @@ public struct ViewData {
 }
 
 public class ImageData{
-  var title: String!
   var offset: CGSize!
   var uiImage: UIImage!
 }
