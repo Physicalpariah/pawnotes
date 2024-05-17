@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C973CF0F2BF728A300161E47 /* CanvasImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C973CF0E2BF728A300161E47 /* CanvasImageView.swift */; };
 		C98EFEDB2BD88207008E17E8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C98EFEDA2BD88207008E17E8 /* Assets.xcassets */; };
 		C98EFEDE2BD88207008E17E8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C98EFEDD2BD88207008E17E8 /* Preview Assets.xcassets */; };
 		C98EFEFA2BD883BC008E17E8 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98EFEF72BD883BB008E17E8 /* Helpers.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C973CF0E2BF728A300161E47 /* CanvasImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasImageView.swift; sourceTree = "<group>"; };
 		C98EFED12BD88205008E17E8 /* Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Note.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98EFEDA2BD88207008E17E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C98EFEDD2BD88207008E17E8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 		C9D32BCF2BD8863500E5C2A9 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				C973CF0E2BF728A300161E47 /* CanvasImageView.swift */,
 				C9D32BCA2BD8863500E5C2A9 /* CanvasView.swift */,
 				C9D32BCB2BD8863500E5C2A9 /* MainView.swift */,
 				C9D32BCC2BD8863500E5C2A9 /* MenuButtonsView.swift */,
@@ -188,6 +191,7 @@
 				C9D32BD12BD8863500E5C2A9 /* MainView.swift in Sources */,
 				C9D32BC92BD8863100E5C2A9 /* ViewDataController.swift in Sources */,
 				C9D32BD02BD8863500E5C2A9 /* CanvasView.swift in Sources */,
+				C973CF0F2BF728A300161E47 /* CanvasImageView.swift in Sources */,
 				C98EFEFA2BD883BC008E17E8 /* Helpers.swift in Sources */,
 				C9D32BC62BD8862C00E5C2A9 /* ViewData.swift in Sources */,
 				C9D32BC52BD8862C00E5C2A9 /* AppData.swift in Sources */,

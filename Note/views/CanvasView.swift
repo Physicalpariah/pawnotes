@@ -9,7 +9,7 @@ struct CanvasView: View {
   static var canvasView: PKCanvasView = PKCanvasView()
 
   @State private var opacityValue = 1.0
-  @State private var offset = CGSize.zero
+  @State private var currentZoom = 0.0
 
   init(_ viewData: AppData) {
     data = viewData
@@ -31,24 +31,50 @@ struct CanvasView: View {
         .scaledToFill()
 
       }
-      if data.currentPageData.images.uiImage != nil {
 
+      MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
+      if data.currentPageData.images.uiImage != nil {
         Image(
           uiImage: data.currentPageData.images.uiImage
         )
         .resizable()
         .scaledToFit()
         .frame(width: 300, height: 300)
-        .offset(offset)
+        .offset(data.currentPageData.images.offset)
+        .scaleEffect(currentZoom + data.currentPageData.images.zoom)
+        .rotationEffect(data.currentPageData.images.rotationAngle)
         .gesture(
-          DragGesture()
-            .onChanged { gesture in
-              offset = gesture.translation
+          MagnifyGesture()
+            .onChanged { value in
+              currentZoom = value.magnification - 1
+              print("zoom is: " + String(currentZoom))
             }
-        )
-      }
-      MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
+            .onEnded { value in
+              data.currentPageData.images.zoom += currentZoom
+              print("zoom is: " + String(data.currentPageData.images.zoom))
 
+              if data.currentPageData.images.zoom > 2 {
+                data.currentPageData.images.zoom = 2
+              } else if data.currentPageData.images.zoom < 0.75 {
+                data.currentPageData.images.zoom = 0.75
+              }
+              currentZoom = 0
+            }
+            .simultaneously(
+              with:
+                RotationGesture()
+                .onChanged { angle in
+                    data.currentPageData.images.rotationAngle = angle
+                }
+            )
+            .simultaneously(
+              with: DragGesture()
+                .onChanged { gesture in
+                  data.currentPageData.images.offset = gesture.translation
+                })
+        )
+
+      }
     }
     .dropDestination(for: Data.self) { items, location in
       guard let item = items.first else { return false }
