@@ -9,6 +9,7 @@ struct CanvasView: View {
   static var canvasView: PKCanvasView = PKCanvasView()
 
   @State private var opacityValue = 1.0
+  @State private var offset = CGSize.zero
 
   init(_ viewData: AppData) {
     data = viewData
@@ -30,7 +31,31 @@ struct CanvasView: View {
         .scaledToFill()
 
       }
+      if data.currentPageData.images.uiImage != nil {
+
+        Image(
+          uiImage: data.currentPageData.images.uiImage
+        )
+        .resizable()
+        .scaledToFit()
+        .frame(width: 300, height: 300)
+        .offset(offset)
+        .gesture(
+          DragGesture()
+            .onChanged { gesture in
+              offset = gesture.translation
+            }
+        )
+      }
       MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
+
+    }
+    .dropDestination(for: Data.self) { items, location in
+      guard let item = items.first else { return false }
+      guard let uiImage = UIImage(data: item) else { return false }
+      data.currentPageData.images.uiImage = uiImage
+      data.SaveDisplay()
+      return true
     }
     .onChange(
       of: data.currentPage,
@@ -42,7 +67,7 @@ struct CanvasView: View {
     .scaleEffect(x: data.pageScaleValueAnim, y: data.pageScaleValueAnim)
     .animation(.easeIn(duration: 0.05), value: data.pageScaleValueAnim)
     .opacity(opacityValue)
-//    .animation(.easeOut(duration: 0.05), value: opacityValue)
+    //    .animation(.easeOut(duration: 0.05), value: opacityValue)
     .onAppear(perform: data.LoadDisplay)
     .onAppear(perform: logPageID)
     .onReceive(
@@ -71,7 +96,7 @@ struct CanvasView: View {
 
   func animateImage(old: Int, new: Int) {
     print("scale started")
-//    opacityValue = 0.9
+    //    opacityValue = 0.9
     if old > new {
       data.pagePositionValueAnim = 100
     } else {

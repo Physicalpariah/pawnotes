@@ -34,20 +34,31 @@ public class AppData: ObservableObject {
   }
 
   func Initialise() {
-    //    Reset()
+    Reset()
     print(currentPage)
     print(count)
 
-    for number in 1...count {
-      let page = ViewData(heading: String(number))
-      pages.append(page)
+    if count > 0 {
+      for number in 1...count {
+        let page = ViewData(heading: String(number))
+        pages.append(page)
+      }
     }
 
     if currentPage == 0 {
       currentPage = 1
     }
 
-    currentPageData = pages[currentPage - 1]
+    if (count == 0)
+      {
+        let page = ViewData(heading: String(currentPage))
+        pages.append(page)
+    }
+      else
+      {
+          currentPageData = pages[currentPage - 1]
+      }
+   
     LoadDisplay()
   }
 
@@ -145,7 +156,8 @@ public class AppData: ObservableObject {
 
   public func SaveDisplay() {
     print("Attempting to save drawing")
-    Save(data: CanvasView.canvasView.drawing.dataRepresentation())
+    currentPageData.data = CanvasView.canvasView.drawing.dataRepresentation()
+    Save(data: currentPageData)
   }
 
   func dataKey() -> String {
@@ -160,7 +172,7 @@ public class AppData: ObservableObject {
     return currentPageData.title + pageCount
   }
 
-  public func Save(data: Data) {
+  public func Save(data: ViewData) {
     let defaults = UserDefaults.standard
     defaults.set(data, forKey: dataKey())
     defaults.set(currentPageData.currentBackground, forKey: bgKey())
@@ -181,6 +193,7 @@ public class AppData: ObservableObject {
     defaults.set(0, forKey: bgKey())
     defaults.set([], forKey: pageCountKey())
     currentPage = 0
+    count = 0
     currentPageData.currentBackground = 0
   }
 
