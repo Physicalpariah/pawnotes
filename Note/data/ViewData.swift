@@ -2,11 +2,12 @@ import PencilKit
 import SwiftUI
 import UIKit
 
-public struct ViewData {
-
+public struct ViewData : Identifiable, Hashable {
+  public var id = UUID()
   var title: String!
   var currentBackground = 0
-  var images = ImageData()
+  var imageCount = 0 
+  var images = [ImageData]()
   var data = Data()
 
   init(heading: String) {
@@ -14,7 +15,16 @@ public struct ViewData {
   }
 }
 
-public class ImageData : ObservableObject {
+public class ImageData : ObservableObject, Hashable {
+    
+    public static func == (lhs: ImageData, rhs: ImageData) -> Bool {
+          lhs === rhs
+      }
+      
+    public func hash(into hasher: inout Hasher) {
+          hasher.combine(ObjectIdentifier(self))
+      }
+    
   var offset = CGSize()
   var zoom = 1.0
   var rotationAngle: Angle = .degrees(0)

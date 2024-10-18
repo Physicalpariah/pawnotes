@@ -9,14 +9,15 @@ struct CanvasView: View {
   static var canvasView: PKCanvasView = PKCanvasView()
 
   @State private var opacityValue = 1.0
-  @State private var currentZoom = 0.0
 
   init(_ viewData: AppData) {
     data = viewData
   }
 
+  
   var body: some View {
 
+    
     ZStack {
       VStack(alignment: .center, spacing: 0) {
         Image(uiImage: #imageLiteral(resourceName: GetBGTop()))
@@ -33,14 +34,19 @@ struct CanvasView: View {
       }
 
       MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
-      if data.currentPageData.images.uiImage != nil {
-          CanvasImageView(data.currentPageData.images)
+      if data.currentPageData.images.count > 0 {
+        ForEach(data.currentPageData.images, id: \.self) { image in
+          CanvasImageView(image)
+        }
       }
     }
     .dropDestination(for: Data.self) { items, location in
       guard let item = items.first else { return false }
       guard let uiImage = UIImage(data: item) else { return false }
-      data.currentPageData.images.uiImage = uiImage
+      let imgData = ImageData()
+      imgData.uiImage = uiImage
+      data.currentPageData.images.append(imgData)
+      data.currentPageData.imageCount = data.currentPageData.images.count
       data.SaveDisplay()
       return true
     }

@@ -29,61 +29,75 @@ let moveScaleDown = 0.95
 struct MainView: View {
 
   @ObservedObject var appData = AppData()
-
+    @State private var firstSelectedDataItem: ViewData?
+    @State private var number: Int = 0
   var body: some View {
-    ZStack(alignment: .top) {
-      CanvasView(appData)
-      MenuButtonsView(appData)
-      VStack {
-        Text(appData.currentPageData.title + " | " + String(appData.count))
-          .font(.system(size: 18))
-          .frame(maxWidth: .infinity, alignment: .center)
-          .padding(.vertical, 40)
-          .opacity(appData.buttonOpacity)
-        Spacer()
+      
+      NavigationSplitView() {
+          Text("Book")
+              List(appData.pages, selection: $firstSelectedDataItem) { item in
+                  Text(item.title).onTapGesture {
+                      appData.PickPage(item);
+                  }
+          }
+      } detail: {
+          ZStack(alignment: .top) {
+            CanvasView(appData)
+            MenuButtonsView(appData)
+            VStack {
+              Text(appData.currentPageData.title + " | " + String(appData.count))
+                .font(.system(size: 18))
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.vertical, 40)
+                .opacity(appData.buttonOpacity)
+              Spacer()
+            }
+          }
+          .frame(alignment: .leading)
+          .onAppear(perform: {
+            appData.Initialise()
+          })
+          .gesture(
+            DragGesture()
+              .onChanged { gesture in
+
+                let width = gesture.translation.width
+                if width < maxTranslation || width > -maxTranslation {
+                  appData.pagePositionValueAnim = width
+                  print("moving!")
+                }
+
+                if width > maxTranslation && width > 0 {
+                  appData.pageScaleValueAnim = moveScaleDown
+                } else if width < -maxTranslation && width < 0 {
+                  appData.pageScaleValueAnim = moveScaleDown
+                } else {
+                  appData.pageScaleValueAnim = 1
+                }
+
+                print(width)
+              }
+              .onEnded { value in
+                print("value ", value.translation.width)
+                let direction = self.detectDirection(value: value)
+                if direction == .left {
+                  // your code here
+                  appData.PrevPage()
+                } else if direction == .right {
+                  // your code here
+                  appData.NextPage()
+                } else {
+                  appData.pagePositionValueAnim = 0
+                }
+                appData.pageScaleValueAnim = 1
+
+                print(direction)
+              }
+          )
       }
-    }
-    .frame(alignment: .leading)
-    .onAppear(perform: {
-      appData.Initialise()
-    })
-    .gesture(
-      DragGesture()
-        .onChanged { gesture in
-
-          let width = gesture.translation.width
-          if width < maxTranslation || width > -maxTranslation {
-            appData.pagePositionValueAnim = width
-            print("moving!")
-          }
-
-          if width > maxTranslation && width > 0 {
-            appData.pageScaleValueAnim = moveScaleDown
-          } else if width < -maxTranslation && width < 0 {
-            appData.pageScaleValueAnim = moveScaleDown
-          } else {
-            appData.pageScaleValueAnim = 1
-          }
-
-          print(width)
-        }
-        .onEnded { value in
-          print("value ", value.translation.width)
-          let direction = self.detectDirection(value: value)
-          if direction == .left {
-            // your code here
-            appData.PrevPage()
-          } else if direction == .right {
-            // your code here
-            appData.NextPage()
-          } else {
-            appData.pagePositionValueAnim = 0
-          }
-          appData.pageScaleValueAnim = 1
-
-          print(direction)
-        }
-    )
+      
+      
+   
   }
 
   func detectDirection(value: DragGesture.Value) -> SwipeHVDirection {

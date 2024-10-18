@@ -53,6 +53,12 @@ public class AppData: ObservableObject {
       let page = ViewData(heading: String(currentPage))
       pages.append(page)
     } else {
+        print(pages.count)
+        print(currentPage)
+        if (currentPage > pages.count)
+        {
+            currentPage = 1
+        }
       currentPageData = pages[currentPage - 1]
     }
 
@@ -83,6 +89,23 @@ public class AppData: ObservableObject {
     }
     SetPage()
   }
+    
+    func PickPage(_ viewData: ViewData) {
+
+        var nextPage: Int = 0
+        for ViewData in pages {
+            nextPage += 1
+            if (viewData == ViewData)
+            {
+                currentPage = nextPage
+            }
+        }
+    if currentPage <= 1 {
+      currentPage = 1
+      pagePositionValueAnim = 0
+    }
+    SetPage()
+}
 
   func SetPage() {
     SaveDisplay()
@@ -165,8 +188,12 @@ public class AppData: ObservableObject {
     return currentPageData.title + bgName
   }
 
-  func imgKey() -> String {
-      return currentPageData.title + "image"
+  func imgCountKey() -> String{
+    return currentPageData.title + "_imageCount"
+  }
+
+  func imgKey(index: Int) -> String {
+      return currentPageData.title + "image" + String(index)
   }
 
   func pageCountKey() -> String {
@@ -180,23 +207,25 @@ public class AppData: ObservableObject {
 
     // TODO: Change this to save to sandbox instead of defaults.
     //  https://cocoacasts.com/ud-9-how-to-save-an-image-in-user-defaults-in-swift#:~:text=It%20is%2C%20but%20it%20isn,in%20the%20user's%20defaults%20database.
-    if currentPageData.images.uiImage != nil {
-        if let data = currentPageData.images.uiImage.pngData() {
-            defaults.set(data, forKey: imgKey())
+    var imgCount = 0
+    for image in currentPageData.images {
+        if let data = image.uiImage.pngData() {
+            defaults.set(data, forKey: imgKey(index: imgCount))
         }
+      imgCount += 1
     }
+
+    defaults.set(currentPageData.imageCount, forKey: imgCountKey())
   }
 
   public func Load() -> Data {
     let defaults = UserDefaults.standard
     currentPageData.currentBackground = defaults.integer(forKey: bgKey())
-      
-      let imgData = defaults.object(forKey: imgKey())
-      if (imgData != nil)
-      {
-      let pngImage = UIImage(data: imgData as! Data)
-          currentPageData.images.uiImage = pngImage ?? UIImage()
-      }
+
+
+// RESUME: get image count key, load images through for loop
+
+// 
     
     return defaults.object(forKey: dataKey()) as? Data ?? Data()
   }
