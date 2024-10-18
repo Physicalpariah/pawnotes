@@ -14,7 +14,7 @@ struct NoteApp: SwiftUI.App {
 
 		var body: some Scene {
 				WindowGroup {
-						MainView()
+						MainView().ignoresSafeArea(edges: .all)
 				}
 		}
 

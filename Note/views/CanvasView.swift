@@ -9,14 +9,15 @@ struct CanvasView: View {
   static var canvasView: PKCanvasView = PKCanvasView()
 
   @State private var opacityValue = 1.0
-  @State private var currentZoom = 0.0
 
   init(_ viewData: AppData) {
     data = viewData
   }
 
+  
   var body: some View {
 
+    
     ZStack {
       VStack(alignment: .center, spacing: 0) {
         Image(uiImage: #imageLiteral(resourceName: GetBGTop()))
@@ -33,16 +34,11 @@ struct CanvasView: View {
       }
 
       MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
-      if data.currentPageData.images.uiImage != nil {
-          CanvasImageView(data.currentPageData.images)
+      if data.currentPageData.images.count > 0 {
+        ForEach(data.currentPageData.images, id: \.self) { image in
+          CanvasImageView(image)
+        }
       }
-    }
-    .dropDestination(for: Data.self) { items, location in
-      guard let item = items.first else { return false }
-      guard let uiImage = UIImage(data: item) else { return false }
-      data.currentPageData.images.uiImage = uiImage
-      data.SaveDisplay()
-      return true
     }
     .onChange(
       of: data.currentPage,
@@ -54,18 +50,8 @@ struct CanvasView: View {
     .scaleEffect(x: data.pageScaleValueAnim, y: data.pageScaleValueAnim)
     .animation(.easeIn(duration: 0.05), value: data.pageScaleValueAnim)
     .opacity(opacityValue)
-    //    .animation(.easeOut(duration: 0.05), value: opacityValue)
     .onAppear(perform: data.LoadDisplay)
     .onAppear(perform: logPageID)
-    .onReceive(
-      NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification),
-      perform: { _ in
-        print("checking for dark mode")
-        //  data.objectWillChange.send()
-        // data.ForceUpdate()
-
-      }
-    )
     .onReceive(
       NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification),
       perform: { output in
@@ -82,19 +68,19 @@ struct CanvasView: View {
   }
 
   func animateImage(old: Int, new: Int) {
-    print("scale started")
-    //    opacityValue = 0.9
-    if old > new {
-      data.pagePositionValueAnim = 100
-    } else {
-      data.pagePositionValueAnim = -100
-    }
-
-    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-      opacityValue = 1
-      print("scale done")
+//    print("scale started")
+//    //    opacityValue = 0.9
+//    if old > new {
+//      data.pagePositionValueAnim = 100
+//    } else {
+//      data.pagePositionValueAnim = -100
+//    }
+//
+//    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+//      opacityValue = 1
+//      print("scale done")
       data.pagePositionValueAnim = 0
-    }
+//    }
   }
 
   func logPageID() {

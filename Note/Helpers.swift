@@ -19,7 +19,7 @@ struct TopImageModifier: ViewModifier {
         func body(content: Content) -> some View {
                 content
                         .scaledToFill()
-                        .frame(width: 40, height: 40.0)
+                        .frame(width: 30, height: 30.0)
         }
 }
 
@@ -27,7 +27,7 @@ struct TopButtonModifier: ViewModifier {
         func body(content: Content) -> some View {
                 content
                         .padding()
-                        .frame(width: 40, height: 40.0)
+                        .frame(width: 30.0, height: 30.0)
         }
 }
 

@@ -18,8 +18,8 @@ struct MenuButtonsView: View {
 
     HStack {
       if !data.buttonDisabled {
+          Spacer()
         TopButtonView(text: "backgrounds", clicked: data.ChangeBG, viewData: data)
-        Spacer()
         TopButtonView(text: "copy", clicked: data.SendToClipboard, viewData: data)
       } else {
         //        Spacer()
@@ -27,7 +27,7 @@ struct MenuButtonsView: View {
         //        Spacer()
       }
     }
-    .padding(.horizontal, 30)
+    .padding(.horizontal, data.horizPadding)
     .padding(.top, data.topPadding)
     .frame(maxWidth: .infinity, alignment: .leading)
     .statusBar(hidden: data.buttonDisabled)
