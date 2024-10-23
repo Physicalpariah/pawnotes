@@ -11,12 +11,12 @@ import SwiftUI
 
 @main
 struct NoteApp: SwiftUI.App {
-
-		var body: some Scene {
-				WindowGroup {
-						MainView().ignoresSafeArea(edges: .all)
-				}
-		}
-
-		func addpage() {}
+    
+    var body: some Scene {
+        WindowGroup {
+            MainView().ignoresSafeArea(edges: .all)
+        }
+    }
+    
+    func addpage() {}
 }

@@ -7,37 +7,37 @@ import UIKit
 //------------------------------------------------------------------------------------------
 
 public func GetDarkMode() -> Bool {
-        let currentSystemScheme = UITraitCollection.current.userInterfaceStyle
-        if currentSystemScheme == .light {
-                return false
-        } else {
-                return true
-        }
+    let currentSystemScheme = UITraitCollection.current.userInterfaceStyle
+    if currentSystemScheme == .light {
+        return false
+    } else {
+        return true
+    }
 }
 
 struct TopImageModifier: ViewModifier {
-        func body(content: Content) -> some View {
-                content
-                        .scaledToFill()
-                        .frame(width: 30, height: 30.0)
-        }
+    func body(content: Content) -> some View {
+        content
+            .scaledToFill()
+            .frame(width: 30, height: 30.0)
+    }
 }
 
 struct TopButtonModifier: ViewModifier {
-        func body(content: Content) -> some View {
-                content
-                        .padding()
-                        .frame(width: 30.0, height: 30.0)
-        }
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .frame(width: 30.0, height: 30.0)
+    }
 }
 
 public func GetIcon(title: String) -> String {
-        let bg = "icon-"
-        var resourceName = bg + title + "-light.png"
-        if GetDarkMode() {
-                resourceName = bg + title + "-dark.png"
-        }
-        return resourceName
+    let bg = "icon-"
+    var resourceName = bg + title + "-light.png"
+    if GetDarkMode() {
+        resourceName = bg + title + "-dark.png"
+    }
+    return resourceName
 }
 
 //------------------------------------------------------------------------------------------
@@ -45,48 +45,48 @@ public func GetIcon(title: String) -> String {
 //------------------------------------------------------------------------------------------
 
 extension Array: RawRepresentable where Element: Codable {
-        public init?(rawValue: String) {
-                guard let data = rawValue.data(using: .utf8),
-                        let result = try? JSONDecoder().decode(
-                                [Element].self,
-                                from: data
-                        )
-                else {
-                        return nil
-                }
-                self = result
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode(
+                [Element].self,
+                from: data
+              )
+        else {
+            return nil
         }
-
-        public var rawValue: String {
-                guard let data = try? JSONEncoder().encode(self),
-                        let result = String(data: data, encoding: .utf8)
-                else {
-                        return "[]"
-                }
-                return result
+        self = result
+    }
+    
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
         }
+        return result
+    }
 }
 
 extension UIImage {
-        public func mergeWith(topImage: UIImage) -> UIImage {
-                let bottomImage = self
-
-                UIGraphicsBeginImageContext(size)
-
-                let areaSize = CGRect(
-                        x: 0,
-                        y: 0,
-                        width: bottomImage.size.width,
-                        height: bottomImage.size.height
-                )
-                bottomImage.draw(in: areaSize)
-
-                topImage.draw(in: areaSize, blendMode: .normal, alpha: 1.0)
-
-                let mergedImage = UIGraphicsGetImageFromCurrentImageContext()!
-                UIGraphicsEndImageContext()
-                return mergedImage
-        }
+    public func mergeWith(topImage: UIImage) -> UIImage {
+        let bottomImage = self
+        
+        UIGraphicsBeginImageContext(size)
+        
+        let areaSize = CGRect(
+            x: 0,
+            y: 0,
+            width: bottomImage.size.width,
+            height: bottomImage.size.height
+        )
+        bottomImage.draw(in: areaSize)
+        
+        topImage.draw(in: areaSize, blendMode: .normal, alpha: 1.0)
+        
+        let mergedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return mergedImage
+    }
 }
 
 
