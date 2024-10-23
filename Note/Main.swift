@@ -14,9 +14,9 @@ struct NoteApp: SwiftUI.App {
     
     var body: some Scene {
         WindowGroup {
-            MainView().ignoresSafeArea(edges: .all)
+            PawCanvasView().ignoresSafeArea(edges: .all)
         }
     }
     
-    func addpage() {}
+//    func addpage() {}
 }

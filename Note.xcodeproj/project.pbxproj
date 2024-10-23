@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,6 +35,10 @@
 		C9D32BCE2BD8863500E5C2A9 /* TopButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopButtonView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C92373F12CC91DF900785195 /* v2 */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = v2; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		C98EFECE2BD88205008E17E8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -65,6 +69,7 @@
 		C98EFED32BD88205008E17E8 /* Note */ = {
 			isa = PBXGroup;
 			children = (
+				C92373F12CC91DF900785195 /* v2 */,
 				C9D32BCF2BD8863500E5C2A9 /* views */,
 				C9D32BC82BD8863100E5C2A9 /* controllers */,
 				C9D32BC42BD8862C00E5C2A9 /* data */,
@@ -127,6 +132,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C92373F12CC91DF900785195 /* v2 */,
 			);
 			name = Note;
 			productName = Note;
