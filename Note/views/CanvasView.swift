@@ -34,11 +34,6 @@ struct CanvasView: View {
             }
             
             MyCanvas(view: CanvasView.canvasView, tag: data.showsTags, picker: picker)
-            if data.currentPageData.images.count > 0 {
-                ForEach(data.currentPageData.images, id: \.self) { image in
-                    CanvasImageView(image)
-                }
-            }
         }
         .onChange(
             of: data.currentPage,

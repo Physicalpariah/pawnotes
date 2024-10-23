@@ -229,18 +229,6 @@ public class AppData: ObservableObject {
         let defaults = UserDefaults.standard
         defaults.set(currentPageData.data, forKey: dataKey())
         defaults.set(currentPageData.currentBackground, forKey: bgKey())
-        
-        // TODO: Change this to save to sandbox instead of defaults.
-        //  https://cocoacasts.com/ud-9-how-to-save-an-image-in-user-defaults-in-swift#:~:text=It%20is%2C%20but%20it%20isn,in%20the%20user's%20defaults%20database.
-        var imgCount = 0
-        for image in currentPageData.images {
-            if let data = image.uiImage.pngData() {
-                defaults.set(data, forKey: imgKey(index: imgCount))
-            }
-            imgCount += 1
-        }
-        
-        defaults.set(currentPageData.imageCount, forKey: imgCountKey())
     }
     
     public func Clear(viewData: ViewData){
